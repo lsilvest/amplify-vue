@@ -29,6 +29,10 @@
     "tsx": "^4.7.2",
     "typescript": "^5.4.5",
     "vite": "^5.4.10",
-    "vue-tsc": "^2.0.11"
+    "vue-tsc": "^2.0.11",
+    "ejs": "^3.1.10",
+    "express": "^4.21.1",
+    "express-session": "^1.18.1",
+    "openid-client": "^5.7.0"
   }
 }
