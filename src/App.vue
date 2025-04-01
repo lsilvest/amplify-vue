@@ -15,27 +15,37 @@
 import { defineComponent, ref, onMounted } from 'vue';
 import { userManager, signOutRedirect } from './auth';
 import Todos from './components/Todos.vue';
+import type { User } from 'oidc-client-ts';
 
 export default defineComponent({
   components: { Todos },
   setup() {
-    const user = ref(null);
-    const loading = ref(true);
+    const user = ref<User | null>(null);
+    const loading = ref<boolean>(true);
 
-    const signIn = () => userManager.signinRedirect();
-    const signOut = () => signOutRedirect();
+    const signIn = async (): Promise<void> => {
+      await userManager.signinRedirect();
+    };
 
-    onMounted(async () => {
+    const signOut = async (): Promise<void> => {
+      await signOutRedirect();
+    };
+
+    onMounted(async (): Promise<void> => {
       try {
-        // If returning from Cognito, parse token
-        if (window.location.search.includes('code=') || window.location.hash.includes('id_token')) {
+        if (
+          window.location.search.includes('code=') ||
+          window.location.hash.includes('id_token')
+        ) {
           await userManager.signinCallback();
-          window.history.replaceState({}, '', '/'); // Clean up URL
+          window.history.replaceState({}, '', '/');
         }
 
-        user.value = await userManager.getUser();
+        const currentUser = await userManager.getUser();
+        user.value = currentUser && !currentUser.expired ? currentUser : null;
       } catch (e) {
         console.warn('Auth error', e);
+        user.value = null;
       } finally {
         loading.value = false;
       }

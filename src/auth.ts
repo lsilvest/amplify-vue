@@ -16,6 +16,6 @@ export const userManager = new UserManager({
 export async function signOutRedirect () {
     const clientId = "1ohvbqs93102i8qkn372coj3f3";
     const logoutUri = "https://main.d2iait8vd00nr8.amplifyapp.com/logout.html";
-    const cognitoDomain = "https://<user pool domain>";
+    const cognitoDomain = "https://amplify-vue.auth.us-east-1.amazoncognito.com";
     window.location.href = `${cognitoDomain}/logout?client_id=${clientId}&logout_uri=${encodeURIComponent(logoutUri)}`;
 };
